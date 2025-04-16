@@ -2,6 +2,7 @@ import os
 import json
 import praw
 from dotenv import load_dotenv
+import time
 
 # Load environment variables
 load_dotenv()
@@ -91,9 +92,20 @@ def parse_posts(posts):
     return results
 
 # Save to JSON file
-def save_to_json(data, filename="output.json"):
+def save_to_json(data, folder="reddit_outputs"):
+    # Create folder if it doesn't exist
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    # Create a unique file name based on the current timestamp
+    timestamp = int(time.time())  # Or use a more fancy way like UUID
+    filename = f"{folder}/output_{timestamp}.json"
+
     with open(filename, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=4, ensure_ascii=False)
+
+    print(f"\nOutput saved to '{filename}'.")
+
 
 # Main runner
 def main():
